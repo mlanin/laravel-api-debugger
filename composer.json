@@ -1,7 +1,7 @@
 {
     "name": "lanin/laravel-api-debugger",
-    "description": ".",
-    "keywords": ["laravel", "framework", "seeding"],
+    "description": "Easily debug your JSON API.",
+    "keywords": ["laravel", "framework", "api", "debug", "debugger", "json", "dump", "queries", "log"],
     "license": "MIT",
     "authors": [
         {
@@ -19,10 +19,10 @@
     },
     "autoload": {
         "psr-4": {
-           "Lanin\\ExtendSeeder\\": "src/"
+           "Lanin\\ApiDebugger\\": "src/"
         },
         "classmap": [
-            "tests/CsvSeederTest.php"
+            "tests/DebuggerTest.php"
         ]
     },
     "minimum-stability": "dev",
