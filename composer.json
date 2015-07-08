@@ -1,0 +1,30 @@
+{
+    "name": "lanin/laravel-api-debugger",
+    "description": ".",
+    "keywords": ["laravel", "framework", "seeding"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Maxim Lanin",
+            "email": "max@lanin.me",
+            "homepage": "http://lanin.me"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "illuminate/support": "~5.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.7.6"
+    },
+    "autoload": {
+        "psr-4": {
+           "Lanin\\ExtendSeeder\\": "src/"
+        },
+        "classmap": [
+            "tests/CsvSeederTest.php"
+        ]
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
