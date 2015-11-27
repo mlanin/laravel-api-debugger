@@ -35,8 +35,8 @@ class Debugger {
 	 */
 	public function __construct(Event $event)
 	{
-	    $this->queries = new Collection();
-	    $this->debug   = new Collection();
+		$this->queries = new Collection();
+		$this->debug   = new Collection();
 		$this->event   = $event;
 
 		$this->event->listen('kernel.handled', function($request, $response)
