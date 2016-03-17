@@ -1,5 +1,5 @@
 # Laravel-API-Debugger
-> Easily debug your JSON API. 
+> Easily debug your JSON API.
 
 When you are developing JSON API sometimes you need to debug it, but if you will use `dd()` or `var_dump()` you will break the output that will affect every client that is working with your API at the moment. Debugger is made to provide you with all your debug information and not corrupt the output.
 
@@ -50,8 +50,14 @@ When you are developing JSON API sometimes you need to debug it, but if you will
 
 To get the latest version of Laravel Laravel-API-Debugger, simply add the following line to the require block of your `composer.json` file.
 
+For Laravel 5.2
 ```
-"lanin/laravel-api-debugger": "dev-master"
+"lanin/laravel-api-debugger": "^0.2.0"
+```
+
+For Laravel 5.1
+```
+"lanin/laravel-api-debugger": "^0.1.0"
 ```
 
 You'll then need to run `composer install` or `composer update` to download it and have the autoloader updated.
@@ -74,7 +80,7 @@ Debugger's two main tasks are to collect your SQL queries and dump variables.
 
 ### Query log
 
-Debugger can provide you with all SQL queries that were fired during the request. 
+Debugger can provide you with all SQL queries that were fired during the request.
 
 It will listen to the `illuminate.query` event and add queries to the output.
 

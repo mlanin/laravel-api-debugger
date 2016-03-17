@@ -1,5 +1,6 @@
 <?php namespace Lanin\ApiDebugger;
 
+use Illuminate\Database\Connection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -27,17 +28,23 @@ class Debugger {
 	 * @var bool
 	 */
 	private $collectQueries = false;
+	/**
+	 * @var Connection
+	 */
+	private $connection;
 
 	/**
 	 * Create a new Debugger service.
 	 *
 	 * @param Event $event
+	 * @param Connection $connection
 	 */
-	public function __construct(Event $event)
+	public function __construct(Event $event, Connection $connection)
 	{
-		$this->queries = new Collection();
-		$this->debug   = new Collection();
+	    $this->queries = new Collection();
+	    $this->debug   = new Collection();
 		$this->event   = $event;
+		$this->db      = $connection;
 
 		$this->event->listen('kernel.handled', function($request, $response)
 		{
@@ -52,9 +59,9 @@ class Debugger {
 	{
 		$this->collectQueries = true;
 
-		$this->event->listen('illuminate.query',function ($query, $args, $time)
+		$this->db->listen(function ($event)
 		{
-			$this->logQuery($query, $args, $time);
+			$this->logQuery($event->sql, $event->bindings, $event->time);
 		});
 	}
 
