@@ -28,6 +28,7 @@ class Debugger {
 	 * @var bool
 	 */
 	private $collectQueries = false;
+	
 	/**
 	 * @var Connection
 	 */
@@ -41,10 +42,10 @@ class Debugger {
 	 */
 	public function __construct(Event $event, Connection $connection)
 	{
-	    $this->queries = new Collection();
-	    $this->debug   = new Collection();
+		$this->queries = new Collection();
+		$this->debug   = new Collection();
 		$this->event   = $event;
-		$this->db      = $connection;
+		$this->connection = $connection;
 
 		$this->event->listen('kernel.handled', function($request, $response)
 		{
@@ -59,7 +60,7 @@ class Debugger {
 	{
 		$this->collectQueries = true;
 
-		$this->db->listen(function ($event)
+		$this->connection->listen(function ($event)
 		{
 			$this->logQuery($event->sql, $event->bindings, $event->time);
 		});
