@@ -87,7 +87,7 @@ $data = [
     'baz' => 1,
 ];
 
-return response()->json(compact('data'));`
+return response()->json(compact('data'));
 ```
 
 For more info about better practicies in json apis you can find here http://jsonapi.org/
