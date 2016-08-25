@@ -74,6 +74,24 @@ Also you can register `DebuggerFacade` for easier  access to the Debugger method
 'Debugger' => Lanin\ApiDebugger\DebuggerFacade::class,
 ```
 
+## Json response
+
+Before extension will populate your answer it will try to distinguish if it is a json response. It will do it by validating if it is a JsonResponse instance. The best way to do it is to return `response()->json();` in your controller's method.
+
+Also please be careful with what you return. As if your answer will not be wrapped in any kind of `data` attribute (`pages` in the example above), frontend could be damaged because of waiting the particular set of attributes but it will return extra `debug` one.
+
+So the best way to return your responses is like this 
+```php
+$data = [
+    'foo' => 'bar',
+    'baz' => 1,
+];
+
+return response()->json(compact('data'));`
+```
+
+For more info about better practicies in json apis you can find here http://jsonapi.org/
+
 ## Debugging
 
 Debugger's two main tasks are to collect your SQL queries and dump variables.
