@@ -49,7 +49,7 @@ class Debugger {
 
 		$this->event->listen('kernel.handled', function($request, $response)
 		{
-			$this->updateRequest($request, $response);
+			$this->updateResponse($request, $response);
 		});
 	}
 
@@ -59,6 +59,7 @@ class Debugger {
 	public function collectDatabaseQueries()
 	{
 		$this->collectQueries = true;
+        $this->connection->enableQueryLog();
 
 		$this->connection->listen(function ($event)
 		{
@@ -100,7 +101,7 @@ class Debugger {
 	 * @param Request $request
 	 * @param Response $response
 	 */
-	private function updateRequest(Request $request, Response $response)
+	private function updateResponse(Request $request, Response $response)
 	{
 		if ($response instanceof JsonResponse && $this->needToUpdateResponse())
 		{
@@ -108,6 +109,8 @@ class Debugger {
 
 			if ($this->collectQueries)
 			{
+			    $this->queries = $this->queries->merge($this->connection->getQueryLog());
+
 				$data['debug']['sql'] = [
 					'total_queries' => $this->queries->count(),
 					'queries' => $this->queries,
