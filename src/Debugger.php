@@ -59,7 +59,7 @@ class Debugger {
 	public function collectDatabaseQueries()
 	{
 		$this->collectQueries = true;
-        $this->connection->enableQueryLog();
+		$this->connection->enableQueryLog();
 
 		$this->connection->listen(function ($event)
 		{
@@ -109,8 +109,6 @@ class Debugger {
 
 			if ($this->collectQueries)
 			{
-			    $this->queries = $this->queries->merge($this->connection->getQueryLog());
-
 				$data['debug']['sql'] = [
 					'total_queries' => $this->queries->count(),
 					'queries' => $this->queries,
