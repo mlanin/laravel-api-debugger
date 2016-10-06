@@ -76,7 +76,10 @@ class Debugger {
 	 */
 	private function logQuery($query, $attributes, $time)
 	{
-		$query = vsprintf(str_replace(['%', '?'], ['%%', "'%s'"], $query), $attributes) . ';';
+		if (!empty($attributes))
+		{
+			$query = vsprintf(str_replace(['%', '?'], ['%%', "'%s'"], $query), $attributes) . ';';
+		}
 
 		$this->queries->push([
 			'query' => $query,
@@ -109,7 +112,7 @@ class Debugger {
 
 			if ($this->collectQueries)
 			{
-				$data['debug']['sql'] = [
+				$data['debug']['database'] = [
 					'total_queries' => $this->queries->count(),
 					'queries' => $this->queries,
 				];
