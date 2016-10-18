@@ -111,6 +111,11 @@ Debugger provides you with the easy way to dump any variable you want right in y
 ```php
 $foo = 'foo';
 $bar = [1, 2, 'bar'];
+
+// As a helper since 0.2.4 version
+lad($foo, $bar);
+
+// or as a facade
 \Debugger::dump($foo, $bar);
 ```
 
