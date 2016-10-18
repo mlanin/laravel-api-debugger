@@ -21,6 +21,9 @@
         "psr-4": {
            "Lanin\\ApiDebugger\\": "src/"
         },
+        "files": [
+            "src/helpers.php"
+        ],
         "classmap": [
             "tests/DebuggerTest.php"
         ]
