@@ -21,17 +21,19 @@ When you are developing JSON API sometimes you need to debug it, but if you will
         "total": 2
     },
     "debug": {
-        "total_queries": 2,
-        "queries": [
-            {
-                "query": "select * from `users` where `email` = 'john.doe@acme.com' limit 1;",
-                "time": 0.38
-            },
-            {
-                "query": "select * from `posts` where `author` = '1';",
-                "time": 1.34
-            },
-        ],
+        "database": {
+            "total": 2,
+            "items": [
+                {
+                    "query": "select * from `users` where `email` = 'john.doe@acme.com' limit 1;",
+                    "time": 0.38
+                },
+                {
+                    "query": "select * from `posts` where `author` = '1';",
+                    "time": 1.34
+                }
+            ]
+        },
         "dump": [
             "foo",
             [
@@ -46,32 +48,31 @@ When you are developing JSON API sometimes you need to debug it, but if you will
 
 ## Installation
 
-[PHP](https://php.net) 5.4+ or [HHVM](http://hhvm.com) 3.3+, [Composer](https://getcomposer.org) and [Laravel](http://laravel.com) 5.0+ are required.
+> Warning! This help is for Laravel 5.4 only. Readme for earlier versions can be found in the relevant branches of this repo.
+
+[PHP](https://php.net) >=5.5.9+ or [HHVM](http://hhvm.com) 3.3+, [Composer](https://getcomposer.org) and [Laravel](http://laravel.com) 5.4+ are required.
 
 To get the latest version of Laravel Laravel-API-Debugger, simply add the following line to the require block of your `composer.json` file.
 
-For Laravel 5.2
+For Laravel 5.4
 ```
-"lanin/laravel-api-debugger": "^0.2.0"
-```
-
-For Laravel 5.1
-```
-"lanin/laravel-api-debugger": "^0.1.0"
+"lanin/laravel-api-debugger": "^0.3.0"
 ```
 
 You'll then need to run `composer install` or `composer update` to download it and have the autoloader updated.
 
 Once Laravel-API-Debugger is installed, you need to register the service provider. Open up `config/app.php` and add the following to the providers key.
 
+For Laravel 5.4
 ```php
-Lanin\ApiDebugger\DebuggerServiceProvider::class,
+Lanin\Laravel\ApiDebugger\ServiceProvider::class,
 ```
 
-Also you can register `DebuggerFacade` for easier  access to the Debugger methods.
+Also you can register a Facade for easier access to the Debugger methods.
 
+For Laravel 5.4
 ```php
-'Debugger' => Lanin\ApiDebugger\DebuggerFacade::class,
+'Debugger' => Lanin\Laravel\ApiDebugger\Facade::class,
 ```
 
 ## Json response
@@ -90,19 +91,11 @@ $data = [
 return response()->json(compact('data'));
 ```
 
-For more info about better practicies in json apis you can find here http://jsonapi.org/
+For more info about better practices in JSON APIs you can find here http://jsonapi.org/
 
 ## Debugging
 
-Debugger's two main tasks are to collect your SQL queries and dump variables.
-
-### Query log
-
-Debugger can provide you with all SQL queries that were fired during the request.
-
-It will listen to the `illuminate.query` event and add queries to the output.
-
-**Note!** It will add queries log ONLY when you set `APP_DEBUG=true`. So you don't have to worry that someone will see your queries on production.
+Debugger's two main tasks are to dump variables and collect your SQL queries. 
 
 ### Var dump
 
@@ -122,6 +115,20 @@ lad($foo, $bar);
 You can simultaneously dump as many vars as you want and they will appear in the answer.
 
 **Note!** Of course it it not the best way do debug your production environment, but sometimes it is the only way. So be careful with this, because everyone will see your output, but at least debug will not break your clients.
+
+### Query log
+
+Debugger can provide you with all SQL queries that were fired during the request.
+
+It will listen to the query events and add them to the the output.
+
+**Note!** It will add queries log ONLY when you set `APP_DEBUG=true`. So you don't have to worry that someone will see your queries on production.
+
+
+### Extending
+
+You can easily add your own data collections to debug output like database queries are. 
+Just look at how it was done in the package itself and repeat for anything you want.
 
 ## Contributing
 

@@ -1,139 +1,92 @@
-<?php namespace Lanin\ApiDebugger;
+<?php
 
-use Illuminate\Database\Connection;
+namespace Lanin\Laravel\ApiDebugger;
+
+use Illuminate\Events\Dispatcher as Event;
+use Illuminate\Foundation\Http\Events\RequestHandled;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
-use Illuminate\Events\Dispatcher as Event;
 use Symfony\Component\HttpFoundation\Response;
 
-class Debugger {
+class Debugger
+{
+    /**
+     * @var string
+     */
+    protected $responseKey = 'debug';
 
-	/**
-	 * @var Collection
-	 */
-	private $queries;
+    /**
+     * @var Storage
+     */
+    protected $storage;
 
-	/**
-	 * @var Event
-	 */
-	private $event;
+    /**
+     * Create a new Debugger service.
+     *
+     * @param Storage $storage
+     * @param Event $event
+     */
+    public function __construct(Storage $storage, Event $event)
+    {
+        $this->storage = $storage;
 
-	/**
-	 * @var Collection
-	 */
-	private $debug;
+        $event->listen(RequestHandled::class, function (RequestHandled $event) {
+            $this->updateResponse($event->request, $event->response);
+        });
+    }
 
-	/**
-	 * @var bool
-	 */
-	private $collectQueries = false;
-	
-	/**
-	 * @var Connection
-	 */
-	private $connection;
+    /**
+     * Inject custom collection.
+     *
+     * @param Collection $collection
+     */
+    public function populateWith(Collection $collection)
+    {
+        $this->storage->inject($collection);
+    }
 
-	/**
-	 * Create a new Debugger service.
-	 *
-	 * @param Event $event
-	 * @param Connection $connection
-	 */
-	public function __construct(Event $event, Connection $connection)
-	{
-		$this->queries = new Collection();
-		$this->debug   = new Collection();
-		$this->event   = $event;
-		$this->connection = $connection;
+    /**
+     * Add vars to debug output.
+     */
+    public function dump()
+    {
+        $this->storage->dump(func_get_args());
+    }
 
-		$this->event->listen('kernel.handled', function($request, $response)
-		{
-			$this->updateResponse($request, $response);
-		});
-	}
+    /**
+     * Update final response.
+     *
+     * @param Request $request
+     * @param Response $response
+     */
+    protected function updateResponse(Request $request, Response $response)
+    {
+        if ($this->needToUpdateResponse($response)) {
+            $data = $response->getData(true);
+            $data[$this->responseKey] = $this->storage->getData();
 
-	/**
-	 * Listen database queries events.
-	 */
-	public function collectDatabaseQueries()
-	{
-		$this->collectQueries = true;
-		$this->connection->enableQueryLog();
+            $response->setData($data);
+        }
+    }
 
-		$this->connection->listen(function ($event)
-		{
-			$this->logQuery($event->sql, $event->bindings, $event->time);
-		});
-	}
+    /**
+     * Check if debugger has to update the response.
+     *
+     * @param  Response $response
+     * @return bool
+     */
+    protected function needToUpdateResponse(Response $response)
+    {
+        return $response instanceof JsonResponse && ! $this->storage->isEmpty();
+    }
 
-	/**
-	 * Log DB query.
-	 *
-	 * @param string $query
-	 * @param array $attributes
-	 * @param float $time
-	 */
-	private function logQuery($query, $attributes, $time)
-	{
-		if (!empty($attributes))
-		{
-			$query = vsprintf(str_replace(['%', '?'], ['%%', "'%s'"], $query), $attributes) . ';';
-		}
-
-		$this->queries->push([
-			'query' => $query,
-			'time' 	=> $time,
-		]);
-	}
-
-	/**
-	 * Add vars to debug output.
-	 */
-	public function dump()
-	{
-		foreach (func_get_args() as $var)
-		{
-			$this->debug->push($var);
-		}
-	}
-
-	/**
-	 * Update final response.
-	 *
-	 * @param Request $request
-	 * @param Response $response
-	 */
-	private function updateResponse(Request $request, Response $response)
-	{
-		if ($response instanceof JsonResponse && $this->needToUpdateResponse())
-		{
-			$data = $response->getData(true);
-
-			if ($this->collectQueries)
-			{
-				$data['debug']['database'] = [
-					'total_queries' => $this->queries->count(),
-					'queries' => $this->queries,
-				];
-			}
-
-			if ( ! $this->debug->isEmpty())
-			{
-				$data['debug']['dump'] = $this->debug;
-			}
-
-			$response->setData($data);
-		}
-	}
-
-	/**
-	 * Check if debugger has to update the response.
-	 *
-	 * @return bool
-	 */
-	private function needToUpdateResponse()
-	{
-		return $this->collectQueries || !$this->debug->isEmpty();
-	}
+    /**
+     * Set response attribute key name.
+     *
+     * @param $key
+     */
+    public function setResponseKey($key)
+    {
+        $this->responseKey = $key;
+    }
 }

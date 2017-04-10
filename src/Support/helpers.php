@@ -1,6 +1,6 @@
 <?php
 
-use Lanin\ApiDebugger\Debugger;
+use Lanin\Laravel\ApiDebugger\Debugger;
 
 if (! function_exists('lad')) {
     /**

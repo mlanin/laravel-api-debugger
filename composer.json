@@ -11,22 +11,26 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0",
-        "illuminate/support": "~5.2"
+        "php": ">=5.5.9",
+        "illuminate/support": "~5.4"
     },
     "require-dev": {
-        "phpunit/phpunit": "^4.7.6"
+        "phpunit/phpunit": "4.*",
+        "orchestra/testbench": "~3.1",
+        "mockery/mockery": "0.9.*"
     },
     "autoload": {
         "psr-4": {
-           "Lanin\\ApiDebugger\\": "src/"
+           "Lanin\\Laravel\\ApiDebugger\\": "src/"
         },
         "files": [
-            "src/helpers.php"
-        ],
-        "classmap": [
-            "tests/DebuggerTest.php"
+            "src/Support/helpers.php"
         ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Lanin\\Laravel\\ApiDebugger\\Tests\\": "tests/"
+        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true
