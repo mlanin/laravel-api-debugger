@@ -127,7 +127,7 @@ It will listen to the query events and add them to the the output.
 ### Extending
 
 You can easily add your own data collections to debug output like database queries are. 
-Just look at how it was done in the package itself and repeat for anything you want.
+Just look at how it was done in the package itself and repeat for anything you want (for example HTTP requests).
 
 ## Contributing
 
