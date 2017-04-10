@@ -48,7 +48,7 @@ When you are developing JSON API sometimes you need to debug it, but if you will
 
 ## Installation
 
-> Warning! This help is for Laravel 5.4 only. Readme for earlier versions can be found in the relevant branches of this repo.
+> This help is for Laravel 5.4 only. Readme for earlier versions can be found in the relevant branches of this repo.
 
 [PHP](https://php.net) >=5.5.9+ or [HHVM](http://hhvm.com) 3.3+, [Composer](https://getcomposer.org) and [Laravel](http://laravel.com) 5.4+ are required.
 
@@ -105,7 +105,7 @@ Debugger provides you with the easy way to dump any variable you want right in y
 $foo = 'foo';
 $bar = [1, 2, 'bar'];
 
-// As a helper since 0.2.4 version
+// As a helper
 lad($foo, $bar);
 
 // or as a facade
@@ -123,7 +123,6 @@ Debugger can provide you with all SQL queries that were fired during the request
 It will listen to the query events and add them to the the output.
 
 **Note!** It will add queries log ONLY when you set `APP_DEBUG=true`. So you don't have to worry that someone will see your queries on production.
-
 
 ### Extending
 
