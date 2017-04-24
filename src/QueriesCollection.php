@@ -67,15 +67,77 @@ class QueriesCollection implements Collection
      * @param array $attributes
      * @param float $time
      */
-    private function logQuery($query, $attributes, $time)
+    public function logQuery($query, array $attributes, $time)
     {
         if (! empty($attributes)) {
-            $query = vsprintf(str_replace(['%', '?'], ['%%', "'%s'"], $query), $attributes) . ';';
+            $query = rtrim(vsprintf(
+                // Replace pdo bindings to printf string bindings escaping % char.
+                str_replace(['%', '?'], ['%%', "'%s'"], $query),
+
+                // Convert all query attributes to strings.
+                $this->normalizeQueryAttributes($attributes)
+            ), ';') . ';';
         }
 
         $this->queries[] = [
             'query' => $query,
-            'time'  => $time,
+            'time' => $time,
         ];
+    }
+
+    /**
+     * Be sure that all attributes sent to DB layer are strings.
+     *
+     * @param  array $attributes
+     * @return array
+     */
+    protected function normalizeQueryAttributes(array $attributes)
+    {
+        $result = [];
+
+        foreach ($attributes as $attribute) {
+            $result[] = $this->convertAttribute($attribute);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Convert attribute to string.
+     *
+     * @param  mixed $attribute
+     * @return string
+     */
+    protected function convertAttribute($attribute)
+    {
+        try {
+            return (string) $attribute;
+        } catch (\Exception $e) {
+            switch (true) {
+                // Handle DateTime attribute pass.
+                case $attribute instanceof \DateTime:
+                    return $attribute->format('Y-m-d H:i:s');
+
+                // Handle callables.
+                case $attribute instanceof \Closure:
+                    return $this->convertAttribute($attribute());
+
+                // Handle arrays using json by default or print_r if error occurred.
+                case is_array($attribute):
+                    $json = json_encode($attribute);
+
+                    return json_last_error() === JSON_ERROR_NONE
+                        ? $json
+                        : print_r($attribute);
+
+                // Handle all other object.
+                case is_object($attribute):
+                    return get_class($attribute);
+
+                // For all unknown.
+                default:
+                    return '?';
+            }
+        }
     }
 }
