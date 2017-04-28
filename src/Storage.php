@@ -56,12 +56,10 @@ class Storage
         foreach ($this->collections as $collection) {
             $items = $collection->items();
 
-            if ($total = count($items)) {
-                $return[$collection->name()] = [
-                    'total' => $total,
-                    'items' => $items,
-                ];
-            }
+            $return[$collection->name()] = [
+                'total' => count($items),
+                'items' => $items,
+            ];
         }
 
         if (count($this->dump) != 0) {
