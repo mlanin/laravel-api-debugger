@@ -5,44 +5,46 @@ When you are developing JSON API sometimes you need to debug it, but if you will
 
 ```json
 {
-    "posts": [
-        {
-            "id": 1,
-            "title": "Title 1",
-            "body": "Body 1"
-        },        
-        {
-            "id": 2,
-            "title": "Title 2",
-            "body": "Body 2"
-        }
-    ],
-    "meta": {
-        "total": 2
+  "posts": [
+    {
+      "id": 1,
+      "title": "Title 1",
+      "body": "Body 1"
     },
-    "debug": {
-        "database": {
-            "total": 2,
-            "items": [
-                {
-                    "query": "select * from `users` where `email` = 'john.doe@acme.com' limit 1;",
-                    "time": 0.38
-                },
-                {
-                    "query": "select * from `posts` where `author` = '1';",
-                    "time": 1.34
-                }
-            ]
-        },
-        "dump": [
-            "foo",
-            [
-                1,
-                2,
-                "bar"
-            ]
-        ]
+    {
+      "id": 2,
+      "title": "Title 2",
+      "body": "Body 2"
     }
+  ],
+  "meta": {
+    "total": 2
+  },
+  "debug": {
+    "database": {
+      "total": 2,
+      "items": [
+        {
+          "connection": "accounts",
+          "query": "select * from `users` where `email` = 'john.doe@acme.com' limit 1;",
+          "time": 0.38
+        },
+        {
+          "connection": "posts",
+          "query": "select * from `posts` where `author` = '1';",
+          "time": 1.34
+        }
+      ]
+    },
+    "dump": [
+      "foo",
+      [
+        1,
+        2,
+        "bar"
+      ]
+    ]
+  }
 }
 ```
 
@@ -56,7 +58,7 @@ To get the latest version of Laravel Laravel-API-Debugger, simply add the follow
 
 For Laravel 5.4
 ```
-"lanin/laravel-api-debugger": "^0.3.0"
+"lanin/laravel-api-debugger": "^0.3"
 ```
 
 You'll then need to run `composer install` or `composer update` to download it and have the autoloader updated.
@@ -88,7 +90,12 @@ $data = [
     'baz' => 1,
 ];
 
-return response()->json(compact('data'));
+return response()->json([
+    'data' => [
+        'foo' => 'bar',
+        'baz' => 1,
+    ],
+]);
 ```
 
 For more info about better practices in JSON APIs you can find here http://jsonapi.org/
