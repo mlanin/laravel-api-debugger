@@ -23,6 +23,10 @@ class DebuggerTest extends TestCase
                     'dump' => [
                         'baz',
                     ],
+                    'database' => [
+                        'total' => 0,
+                        'items' =>[],
+                    ]
                 ],
             ]);
     }
@@ -47,6 +51,7 @@ class DebuggerTest extends TestCase
                     'database' => [
                         'items' => [
                             '*' => [
+                                'connection',
                                 'query',
                                 'time',
                             ],

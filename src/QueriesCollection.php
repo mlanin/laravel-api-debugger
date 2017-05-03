@@ -3,6 +3,7 @@
 namespace Lanin\Laravel\ApiDebugger;
 
 use Illuminate\Database\Connection;
+use Illuminate\Database\Events\QueryExecuted;
 
 class QueriesCollection implements Collection
 {
@@ -55,34 +56,35 @@ class QueriesCollection implements Collection
     {
         $this->connection->enableQueryLog();
 
-        $this->connection->listen(function ($event) {
-            $this->logQuery($event->sql, $event->bindings, $event->time);
+        $this->connection->listen(function (QueryExecuted $event) {
+            $this->logQuery($event->connectionName, $event->sql, $event->bindings, $event->time);
         });
     }
 
     /**
      * Log DB query.
      *
+     * @param string $connection
      * @param string $query
-     * @param array $attributes
+     * @param array $bindings
      * @param float $time
      */
-    public function logQuery($query, array $attributes, $time)
+    public function logQuery($connection, $query, array $bindings, $time)
     {
-        if (! empty($attributes)) {
-            $query = rtrim(vsprintf(
+        if (! empty($bindings)) {
+            $query = vsprintf(
                 // Replace pdo bindings to printf string bindings escaping % char.
                 str_replace(['%', '?'], ['%%', "'%s'"], $query),
 
                 // Convert all query attributes to strings.
-                $this->normalizeQueryAttributes($attributes)
-            ), ';') . ';';
+                $this->normalizeQueryAttributes($bindings)
+            );
         }
 
-        $this->queries[] = [
-            'query' => $query,
-            'time' => $time,
-        ];
+        // Finish query with semicolon.
+        $query = rtrim($query, ';') . ';';
+
+        $this->queries[] = compact('connection', 'query', 'time');
     }
 
     /**
