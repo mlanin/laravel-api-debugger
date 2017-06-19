@@ -3,6 +3,7 @@
 namespace Lanin\Laravel\ApiDebugger\Tests;
 
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Cache;
 
 class DebuggerTest extends TestCase
 {
@@ -111,5 +112,54 @@ class DebuggerTest extends TestCase
 			]);
 	}
 
+	/** @test */
+	public function it_can_show_cache_events()
+	{
+		$this->app['router']->get('foo', function () {
+			$value = Cache::tags('foo')->remember('bar', 60, function () {
+				return 'bar';
+			});
 
+			$value = Cache::get('bar');
+
+			return response()->json(['foo' => $value]);
+		});
+
+		$this->json('get', '/foo')
+			->assertStatus(200)
+			->assertJsonStructure([
+				'debug' => [
+					'cache' => [
+						'hit' => [
+							'keys',
+							'total',
+						],
+						'miss' => [
+							'keys',
+							'total',
+						],
+						'write' => [
+							'keys',
+							'total',
+						],
+						'forget' => [
+							'keys',
+							'total',
+						],
+					]
+				]
+			])
+			->assertJsonFragment([
+				'miss' => [
+					'keys' => [
+						[
+							'tags' => ['foo'],
+							'key' => 'bar',
+						],
+						'bar'
+					],
+					'total' => 2
+				]
+			]);
+	}
 }

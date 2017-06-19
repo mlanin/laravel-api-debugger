@@ -10,5 +10,8 @@ return [
 
 		// Profile custom events.
 		\Lanin\Laravel\ApiDebugger\Collections\ProfilingCollection::class,
+
+		// Show cache events.
+		\Lanin\Laravel\ApiDebugger\Collections\CacheCollection::class,
 	],
 ];

@@ -12,7 +12,7 @@ class ProfilingCollection implements Collection
     /**
      * @var Dispatcher
      */
-    protected $events;
+    protected $dispatcher;
 
     /**
      * @var array
@@ -31,7 +31,7 @@ class ProfilingCollection implements Collection
      */
     public function __construct(Dispatcher $dispatcher)
     {
-        $this->events = $dispatcher;
+        $this->dispatcher = $dispatcher;
 
         $this->listen();
     }
@@ -61,11 +61,11 @@ class ProfilingCollection implements Collection
      */
     public function listen()
     {
-        $this->events->listen(StartProfiling::class, function (StartProfiling $event) {
+        $this->dispatcher->listen(StartProfiling::class, function (StartProfiling $event) {
 			$this->started[$event->name] = microtime(true);
 		});
 
-        $this->events->listen(StopProfiling::class, function (StopProfiling $event) {
+        $this->dispatcher->listen(StopProfiling::class, function (StopProfiling $event) {
         	if (array_key_exists($event->name, $this->started)) {
         		$this->timers[] = [
         			'event' => $event->name,
