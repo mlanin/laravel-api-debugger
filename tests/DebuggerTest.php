@@ -71,13 +71,10 @@ class DebuggerTest extends TestCase
 			->assertJsonStructure([
 				'debug' => [
 					'profiling' => [
-						'items' => [
-							'*' => [
-								'event',
-								'time',
-							],
+						'*' => [
+							'event',
+							'time',
 						],
-						'total',
 					],
 				],
 			])
@@ -102,13 +99,10 @@ class DebuggerTest extends TestCase
 			->assertJsonStructure([
 				'debug' => [
 					'profiling' => [
-						'items' => [
-							'*' => [
-								'event',
-								'time',
-							],
+						'*' => [
+							'event',
+							'time',
 						],
-						'total',
 					],
 				],
 			])

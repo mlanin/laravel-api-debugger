@@ -54,12 +54,7 @@ class Storage
         $return = [];
 
         foreach ($this->collections as $collection) {
-            $items = $collection->items();
-
-            $return[$collection->name()] = [
-                'total' => count($items),
-                'items' => $items,
-            ];
+            $return[$collection->name()] = $collection->items();
         }
 
         if (count($this->dump) != 0) {

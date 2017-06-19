@@ -43,7 +43,7 @@ class QueriesCollectionTest extends TestCase
         $collection = $this->factory();
 
         $collection->logQuery($connection, $query, $attributes, 1);
-        $this->assertEquals($result, $collection->items()[0]['query']);
+        $this->assertEquals($result, $collection->items()['items'][0]['query']);
     }
 
     public function mixedAttributesProvider()
@@ -116,7 +116,7 @@ class QueriesCollectionTest extends TestCase
         $collection = $this->factory();
 
         $collection->logQuery($connection, $query, $attributes, 1);
-        $this->assertEquals($result, $collection->items()[0]['query']);
+        $this->assertEquals($result, $collection->items()['items'][0]['query']);
     }
 
     public function factory()
