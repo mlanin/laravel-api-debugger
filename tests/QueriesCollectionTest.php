@@ -3,7 +3,7 @@
 namespace Lanin\Laravel\ApiDebugger\Tests;
 
 use Illuminate\Database\Connection;
-use Lanin\Laravel\ApiDebugger\QueriesCollection;
+use Lanin\Laravel\ApiDebugger\Collections\QueriesCollection;
 
 class QueriesCollectionTest extends TestCase
 {

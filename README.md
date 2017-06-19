@@ -104,7 +104,7 @@ For more info about better practices in JSON APIs you can find here http://jsona
 
 ## Debugging
 
-Debugger's two main tasks are to dump variables and collect your SQL queries. 
+Debugger's two main tasks are to dump variables and collect anny additional info about your request. 
 
 ### Var dump
 
@@ -123,19 +123,51 @@ lad($foo, $bar);
 
 You can simultaneously dump as many vars as you want and they will appear in the answer.
 
-**Note!** Of course it it not the best way do debug your production environment, but sometimes it is the only way. So be careful with this, because everyone will see your output, but at least debug will not break your clients.
+**Note!** Of course it it not the best way do debug your production environment, but sometimes it is the only way. 
+So be careful with this, because everyone will see your output, but at least debug will not break your clients.
 
-### Query log
+### Collecting data
 
-Debugger can provide you with all SQL queries that were fired during the request.
+**Note!** By default Debugger will collect data ONLY when you set `APP_DEBUG=true`. 
+So you don't have to worry that someone will see your system data on production.
 
-It will listen to the query events and add them to the the output.
+All available collections can be found in `api-debugger.php` config that you can publish and update as you wish.
 
-**Note!** It will add queries log ONLY when you set `APP_DEBUG=true`. So you don't have to worry that someone will see your queries on production.
+#### QueriesCollection
+
+This collections listens to all queries events and logs them in `connections`, `query`, `time` structure.
+
+#### ProfilingCollection
+
+It allows you to measure time taken to perform actions in your code.
+There are 2 ways to do it.
+
+Automatically:
+
+```php
+Debugger::profileMe('event-name', function () {
+    sleep(1);
+});
+```
+
+Or manually:
+
+```php
+Debugger::startProfiling('event-name');
+usleep(300);
+Debugger::stopProfiling('event-name');
+```
+
+Also helpers are available:
+```php
+lad_pr_start();
+lad_pr_stop();
+lad_pr_me();
+```
 
 ### Extending
 
-You can easily add your own data collections to debug output like database queries are. 
+You can easily add your own data collections to debug output. 
 Just look at how it was done in the package itself and repeat for anything you want (for example HTTP requests).
 
 ## Contributing

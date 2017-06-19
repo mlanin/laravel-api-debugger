@@ -6,7 +6,7 @@ use Illuminate\Database\Schema\Blueprint;
 
 class DebuggerTest extends TestCase
 {
-    /** @test */
+	/** @test */
     public function it_can_dump_var_via_helper()
     {
         $this->app['router']->get('foo', function () {
@@ -17,18 +17,11 @@ class DebuggerTest extends TestCase
 
         $this->json('get', '/foo')
             ->assertStatus(200)
-            ->assertExactJson([
-                'foo' => 'bar',
-                'debug' => [
-                    'dump' => [
-                        'baz',
-                    ],
-                    'database' => [
-                        'total' => 0,
-                        'items' =>[],
-                    ]
-                ],
-            ]);
+			->assertJsonFragment([
+				'dump' => [
+					'baz',
+				]
+			]);
     }
 
     /** @test */
@@ -61,4 +54,68 @@ class DebuggerTest extends TestCase
                 ],
             ]);
     }
+
+	/** @test */
+	public function it_can_profile_custom_events()
+	{
+		$this->app['router']->get('foo', function () {
+			lad_pr_start('test');
+			usleep(300);
+			lad_pr_stop('test');
+
+			return response()->json(['foo' => 'bar']);
+		});
+
+		$this->json('get', '/foo')
+			->assertStatus(200)
+			->assertJsonStructure([
+				'debug' => [
+					'profiling' => [
+						'items' => [
+							'*' => [
+								'event',
+								'time',
+							],
+						],
+						'total',
+					],
+				],
+			])
+			->assertJsonFragment([
+				'event' => 'test',
+			]);
+	}
+
+	/** @test */
+	public function it_can_profile_simple_actions()
+	{
+		$this->app['router']->get('foo', function () {
+			lad_pr_me('test', function () {
+				usleep(300);
+			});
+
+			return response()->json(['foo' => 'bar']);
+		});
+
+		$this->json('get', '/foo')
+			->assertStatus(200)
+			->assertJsonStructure([
+				'debug' => [
+					'profiling' => [
+						'items' => [
+							'*' => [
+								'event',
+								'time',
+							],
+						],
+						'total',
+					],
+				],
+			])
+			->assertJsonFragment([
+				'event' => 'test',
+			]);
+	}
+
+
 }

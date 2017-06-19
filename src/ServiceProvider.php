@@ -4,16 +4,27 @@ namespace Lanin\Laravel\ApiDebugger;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
+	/**
+	 * Indicates if loading of the provider is deferred.
+	 *
+	 * @var bool
+	 */
+	protected $defer = false;
+
     /**
      * Bootstrap application service.
      */
     public function boot()
     {
+		$configPath = __DIR__ . '/../config/api-debugger.php';
+		$this->publishes([$configPath => config_path('api-debugger.php')]);
+		$this->mergeConfigFrom($configPath, 'api-debugger');
+
         // Listen to database queries and inject them to debug output.
-        if ($this->app['config']['app.debug']) {
-            $this->app->make(Debugger::class)
-                ->populateWith($this->app->make(QueriesCollection::class));
-        }
+		$config = $this->app['config'];
+        if ($config['app.debug']) {
+			$this->registerCollections($config['api-debugger.collections'] );
+		}
     }
 
     /**
@@ -39,4 +50,18 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             Debugger::class,
         ];
     }
+
+	/**
+	 * Register requested collections within debugger.
+	 *
+	 * @param Collection[] $collections
+	 */
+	protected function registerCollections(array $collections)
+	{
+		$debugger = $this->app->make(Debugger::class);
+
+		foreach ($collections as $collection) {
+			$debugger->populateWith($this->app->make($collection));
+		}
+	}
 }

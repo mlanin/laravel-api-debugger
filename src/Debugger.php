@@ -6,6 +6,8 @@ use Illuminate\Events\Dispatcher as Event;
 use Illuminate\Foundation\Http\Events\RequestHandled;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Lanin\Laravel\ApiDebugger\Events\StopProfiling;
+use Lanin\Laravel\ApiDebugger\Events\StartProfiling;
 use Symfony\Component\HttpFoundation\Response;
 
 class Debugger
@@ -20,7 +22,12 @@ class Debugger
      */
     protected $storage;
 
-    /**
+	/**
+	 * @var Event
+	 */
+	protected $event;
+
+	/**
      * Create a new Debugger service.
      *
      * @param Storage $storage
@@ -29,11 +36,12 @@ class Debugger
     public function __construct(Storage $storage, Event $event)
     {
         $this->storage = $storage;
+		$this->event = $event;
 
-        $event->listen(RequestHandled::class, function (RequestHandled $event) {
+		$this->event->listen(RequestHandled::class, function (RequestHandled $event) {
             $this->updateResponse($event->request, $event->response);
         });
-    }
+	}
 
     /**
      * Inject custom collection.
@@ -52,6 +60,43 @@ class Debugger
     {
         $this->storage->dump(func_get_args());
     }
+
+	/**
+	 * Start profiling event.
+	 *
+	 * @param  string $name
+	 * @return mixed
+	 */
+    public function startProfiling($name)
+	{
+		$this->event->dispatch(new StartProfiling($name));
+	}
+
+	/**
+	 * Finish profiling event.
+	 *
+	 * @param string $name
+	 */
+    public function stopProfiling($name)
+	{
+		$this->event->dispatch(new StopProfiling($name));
+	}
+
+	/**
+	 * Profile action.
+	 *
+	 * @param  string $name
+	 * @param  \Closure|null $action
+	 * @return mixed
+	 */
+	public function profileMe($name, \Closure $action = null)
+	{
+		$this->startProfiling($name);
+		$return = $action();
+		$this->stopProfiling($name);
+
+		return $return;
+	}
 
     /**
      * Update final response.

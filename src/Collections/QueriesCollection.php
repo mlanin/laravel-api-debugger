@@ -1,9 +1,10 @@
 <?php
 
-namespace Lanin\Laravel\ApiDebugger;
+namespace Lanin\Laravel\ApiDebugger\Collections;
 
 use Illuminate\Database\Connection;
 use Illuminate\Database\Events\QueryExecuted;
+use Lanin\Laravel\ApiDebugger\Collection;
 
 class QueriesCollection implements Collection
 {
