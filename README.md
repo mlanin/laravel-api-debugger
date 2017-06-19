@@ -137,6 +137,10 @@ All available collections can be found in `api-debugger.php` config that you can
 
 This collections listens to all queries events and logs them in `connections`, `query`, `time` structure.
 
+#### CacheCollection
+
+It can show you cache hits, misses, writes and forgets.
+
 #### ProfilingCollection
 
 It allows you to measure time taken to perform actions in your code.
