@@ -36,12 +36,12 @@ class Debugger
     public function __construct(Storage $storage, Event $event)
     {
         $this->storage = $storage;
-		$this->event = $event;
+        $this->event = $event;
 
-		$this->event->listen(RequestHandled::class, function (RequestHandled $event) {
+        $this->event->listen(RequestHandled::class, function (RequestHandled $event) {
             $this->updateResponse($event->request, $event->response);
         });
-	}
+    }
 
     /**
      * Inject custom collection.
@@ -107,7 +107,7 @@ class Debugger
     protected function updateResponse(Request $request, Response $response)
     {
         if ($this->needToUpdateResponse($response)) {
-            $data = $response->getData(true);
+            $data = $response->getData(true) ?: [];
             $data[$this->responseKey] = $this->storage->getData();
 
             $response->setData($data);
