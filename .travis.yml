@@ -14,7 +14,7 @@ cache:
     - $HOME/.composer/cache
 
 install:
-  - travis_retry composer install --no-interaction --prefer-dist -vvv
+  - travis_retry composer install --no-interaction --prefer-dist
 
 before_script:
   - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-dist
