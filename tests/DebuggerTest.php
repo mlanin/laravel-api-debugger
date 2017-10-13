@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Cache;
 
 class DebuggerTest extends TestCase
 {
-	/** @test */
+    /** @test */
     public function it_can_dump_var_via_helper()
     {
         $this->app['router']->get('foo', function () {
@@ -18,11 +18,11 @@ class DebuggerTest extends TestCase
 
         $this->json('get', '/foo')
             ->assertStatus(200)
-			->assertJsonFragment([
-				'dump' => [
-					'baz',
-				]
-			]);
+            ->assertJsonFragment([
+                'dump' => [
+                    'baz',
+                ]
+            ]);
     }
 
     /** @test */
@@ -56,110 +56,110 @@ class DebuggerTest extends TestCase
             ]);
     }
 
-	/** @test */
-	public function it_can_profile_custom_events()
-	{
-		$this->app['router']->get('foo', function () {
-			lad_pr_start('test');
-			usleep(300);
-			lad_pr_stop('test');
+    /** @test */
+    public function it_can_profile_custom_events()
+    {
+        $this->app['router']->get('foo', function () {
+            lad_pr_start('test');
+            usleep(300);
+            lad_pr_stop('test');
 
-			return response()->json(['foo' => 'bar']);
-		});
+            return response()->json(['foo' => 'bar']);
+        });
 
-		$this->json('get', '/foo')
-			->assertStatus(200)
-			->assertJsonStructure([
-				'debug' => [
-					'profiling' => [
-						'*' => [
-							'event',
-							'time',
-						],
-					],
-				],
-			])
-			->assertJsonFragment([
-				'event' => 'test',
-			]);
-	}
+        $this->json('get', '/foo')
+            ->assertStatus(200)
+            ->assertJsonStructure([
+                'debug' => [
+                    'profiling' => [
+                        '*' => [
+                            'event',
+                            'time',
+                        ],
+                    ],
+                ],
+            ])
+            ->assertJsonFragment([
+                'event' => 'test',
+            ]);
+    }
 
-	/** @test */
-	public function it_can_profile_simple_actions()
-	{
-		$this->app['router']->get('foo', function () {
-			lad_pr_me('test', function () {
-				usleep(300);
-			});
+    /** @test */
+    public function it_can_profile_simple_actions()
+    {
+        $this->app['router']->get('foo', function () {
+            lad_pr_me('test', function () {
+                usleep(300);
+            });
 
-			return response()->json(['foo' => 'bar']);
-		});
+            return response()->json(['foo' => 'bar']);
+        });
 
-		$this->json('get', '/foo')
-			->assertStatus(200)
-			->assertJsonStructure([
-				'debug' => [
-					'profiling' => [
-						'*' => [
-							'event',
-							'time',
-						],
-					],
-				],
-			])
-			->assertJsonFragment([
-				'event' => 'test',
-			]);
-	}
+        $this->json('get', '/foo')
+            ->assertStatus(200)
+            ->assertJsonStructure([
+                'debug' => [
+                    'profiling' => [
+                        '*' => [
+                            'event',
+                            'time',
+                        ],
+                    ],
+                ],
+            ])
+            ->assertJsonFragment([
+                'event' => 'test',
+            ]);
+    }
 
-	/** @test */
-	public function it_can_show_cache_events()
-	{
-		$this->app['router']->get('foo', function () {
-			$value = Cache::tags('foo')->remember('bar', 60, function () {
-				return 'bar';
-			});
+    /** @test */
+    public function it_can_show_cache_events()
+    {
+        $this->app['router']->get('foo', function () {
+            $value = Cache::tags('foo')->remember('bar', 60, function () {
+                return 'bar';
+            });
 
-			$value = Cache::get('bar');
+            $value = Cache::get('bar');
 
-			return response()->json(['foo' => $value]);
-		});
+            return response()->json(['foo' => $value]);
+        });
 
-		$this->json('get', '/foo')
-			->assertStatus(200)
-			->assertJsonStructure([
-				'debug' => [
-					'cache' => [
-						'hit' => [
-							'keys',
-							'total',
-						],
-						'miss' => [
-							'keys',
-							'total',
-						],
-						'write' => [
-							'keys',
-							'total',
-						],
-						'forget' => [
-							'keys',
-							'total',
-						],
-					]
-				]
-			])
-			->assertJsonFragment([
-				'miss' => [
-					'keys' => [
-						[
-							'tags' => ['foo'],
-							'key' => 'bar',
-						],
-						'bar'
-					],
-					'total' => 2
-				]
-			]);
-	}
+        $this->json('get', '/foo')
+            ->assertStatus(200)
+            ->assertJsonStructure([
+                'debug' => [
+                    'cache' => [
+                        'hit' => [
+                            'keys',
+                            'total',
+                        ],
+                        'miss' => [
+                            'keys',
+                            'total',
+                        ],
+                        'write' => [
+                            'keys',
+                            'total',
+                        ],
+                        'forget' => [
+                            'keys',
+                            'total',
+                        ],
+                    ]
+                ]
+            ])
+            ->assertJsonFragment([
+                'miss' => [
+                    'keys' => [
+                        [
+                            'tags' => ['foo'],
+                            'key' => 'bar',
+                        ],
+                        'bar'
+                    ],
+                    'total' => 2
+                ]
+            ]);
+    }
 }

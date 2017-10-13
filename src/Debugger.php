@@ -22,12 +22,12 @@ class Debugger
      */
     protected $storage;
 
-	/**
-	 * @var Event
-	 */
-	protected $event;
+    /**
+     * @var Event
+     */
+    protected $event;
 
-	/**
+    /**
      * Create a new Debugger service.
      *
      * @param Storage $storage
@@ -61,42 +61,42 @@ class Debugger
         $this->storage->dump(func_get_args());
     }
 
-	/**
-	 * Start profiling event.
-	 *
-	 * @param  string $name
-	 * @return mixed
-	 */
+    /**
+     * Start profiling event.
+     *
+     * @param  string $name
+     * @return mixed
+     */
     public function startProfiling($name)
-	{
-		$this->event->dispatch(new StartProfiling($name));
-	}
+    {
+        $this->event->dispatch(new StartProfiling($name));
+    }
 
-	/**
-	 * Finish profiling event.
-	 *
-	 * @param string $name
-	 */
+    /**
+     * Finish profiling event.
+     *
+     * @param string $name
+     */
     public function stopProfiling($name)
-	{
-		$this->event->dispatch(new StopProfiling($name));
-	}
+    {
+        $this->event->dispatch(new StopProfiling($name));
+    }
 
-	/**
-	 * Profile action.
-	 *
-	 * @param  string $name
-	 * @param  \Closure|null $action
-	 * @return mixed
-	 */
-	public function profileMe($name, \Closure $action = null)
-	{
-		$this->startProfiling($name);
-		$return = $action();
-		$this->stopProfiling($name);
+    /**
+     * Profile action.
+     *
+     * @param  string $name
+     * @param  \Closure|null $action
+     * @return mixed
+     */
+    public function profileMe($name, \Closure $action = null)
+    {
+        $this->startProfiling($name);
+        $return = $action();
+        $this->stopProfiling($name);
 
-		return $return;
-	}
+        return $return;
+    }
 
     /**
      * Update final response.

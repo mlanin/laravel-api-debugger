@@ -129,6 +129,6 @@ class QueriesCollectionTest extends TestCase
     }
 }
 
-class Foo {
-
+class Foo
+{
 }

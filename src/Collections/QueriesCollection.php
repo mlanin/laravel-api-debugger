@@ -47,10 +47,10 @@ class QueriesCollection implements Collection
      */
     public function items()
     {
-		return [
-			'total' => count($this->queries),
-			'items' => $this->queries,
-		];
+        return [
+            'total' => count($this->queries),
+            'items' => $this->queries,
+        ];
     }
 
     /**

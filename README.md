@@ -58,9 +58,8 @@ When you are developing JSON API sometimes you need to debug it, but if you will
 
 To get the latest version of Laravel Laravel-API-Debugger, simply add the following line to the require block of your `composer.json` file.
 
-For Laravel 5.4
 ```
-"lanin/laravel-api-debugger": "^0.3"
+"lanin/laravel-api-debugger": "^3.0"
 ```
 
 You'll then need to run `composer install` or `composer update` to download it and have the autoloader updated.
@@ -85,7 +84,7 @@ Before extension will populate your answer it will try to distinguish if it is a
 
 Also please be careful with what you return. As if your answer will not be wrapped in any kind of `data` attribute (`pages` in the example above), frontend could be damaged because of waiting the particular set of attributes but it will return extra `debug` one.
 
-So the best way to return your responses is like this 
+So the best way to return your responses is like this
 ```php
 $data = [
     'foo' => 'bar',
@@ -104,7 +103,7 @@ For more info about better practices in JSON APIs you can find here http://jsona
 
 ## Debugging
 
-Debugger's two main tasks are to dump variables and collect anny additional info about your request. 
+Debugger's two main tasks are to dump variables and collect anny additional info about your request.
 
 ### Var dump
 
@@ -123,12 +122,12 @@ lad($foo, $bar);
 
 You can simultaneously dump as many vars as you want and they will appear in the answer.
 
-**Note!** Of course it it not the best way do debug your production environment, but sometimes it is the only way. 
+**Note!** Of course it it not the best way do debug your production environment, but sometimes it is the only way.
 So be careful with this, because everyone will see your output, but at least debug will not break your clients.
 
 ### Collecting data
 
-**Note!** By default Debugger will collect data ONLY when you set `APP_DEBUG=true`. 
+**Note!** By default Debugger will collect data ONLY when you set `APP_DEBUG=true`.
 So you don't have to worry that someone will see your system data on production.
 
 All available collections can be found in `api-debugger.php` config that you can publish and update as you wish.
@@ -171,7 +170,7 @@ lad_pr_me();
 
 ### Extending
 
-You can easily add your own data collections to debug output. 
+You can easily add your own data collections to debug output.
 Just look at how it was done in the package itself and repeat for anything you want (for example HTTP requests).
 
 ## Contributing

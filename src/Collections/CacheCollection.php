@@ -21,11 +21,11 @@ class CacheCollection implements Collection
      * @var array
      */
     protected $events = [
-		'hit' => ['keys' => [], 'total' => 0],
-		'miss' => ['keys' => [], 'total' => 0],
-		'write' => ['keys' => [], 'total' => 0],
-		'forget' => ['keys' => [], 'total' => 0],
-	];
+        'hit' => ['keys' => [], 'total' => 0],
+        'miss' => ['keys' => [], 'total' => 0],
+        'write' => ['keys' => [], 'total' => 0],
+        'forget' => ['keys' => [], 'total' => 0],
+    ];
 
     /**
      * CacheCollection constructor.
@@ -70,60 +70,60 @@ class CacheCollection implements Collection
         $this->dispatcher->listen(KeyForgotten::class, [$this, 'forget']);
     }
 
-	/**
-	 * Store hit.
-	 *
-	 * @param CacheHit $event
-	 */
+    /**
+     * Store hit.
+     *
+     * @param CacheHit $event
+     */
     public function hit(CacheHit $event)
-	{
-		$this->store(__FUNCTION__, $event);
-	}
+    {
+        $this->store(__FUNCTION__, $event);
+    }
 
-	/**
-	 * Store miss.
-	 *
-	 * @param CacheMissed $event
-	 */
-	public function miss(CacheMissed $event)
-	{
-		$this->store(__FUNCTION__, $event);
-	}
+    /**
+     * Store miss.
+     *
+     * @param CacheMissed $event
+     */
+    public function miss(CacheMissed $event)
+    {
+        $this->store(__FUNCTION__, $event);
+    }
 
-	/**
-	 * Store write.
-	 *
-	 * @param KeyWritten $event
-	 */
-	public function write(KeyWritten $event)
-	{
-		$this->store(__FUNCTION__, $event);
-	}
+    /**
+     * Store write.
+     *
+     * @param KeyWritten $event
+     */
+    public function write(KeyWritten $event)
+    {
+        $this->store(__FUNCTION__, $event);
+    }
 
-	/**
-	 * Store forget.
-	 *
-	 * @param KeyForgotten $event
-	 */
-	public function forget(KeyForgotten $event)
-	{
-		$this->store(__FUNCTION__, $event);
-	}
+    /**
+     * Store forget.
+     *
+     * @param KeyForgotten $event
+     */
+    public function forget(KeyForgotten $event)
+    {
+        $this->store(__FUNCTION__, $event);
+    }
 
-	/**
-	 * Store event.
-	 *
-	 * @param string $label
-	 * @param CacheEvent $event
-	 */
+    /**
+     * Store event.
+     *
+     * @param string $label
+     * @param CacheEvent $event
+     */
     protected function store($label, CacheEvent $event)
-	{
-		$tags = $event->tags;
+    {
+        $tags = $event->tags;
 
-		$this->events[$label]['keys'][] = !empty($tags)
-			? ['tags' => $tags, 'key' => $event->key]
-			: $event->key;
+        $this->events[$label]['keys'][] = ! empty($tags)
+            ? ['tags' => $tags, 'key' => $event->key]
+            : $event->key;
 
-		$this->events[$label]['total']++;
-	}
+        $this->events[$label]['total']++;
+    }
 }

@@ -62,16 +62,16 @@ class ProfilingCollection implements Collection
     public function listen()
     {
         $this->dispatcher->listen(StartProfiling::class, function (StartProfiling $event) {
-			$this->started[$event->name] = microtime(true);
-		});
+            $this->started[$event->name] = microtime(true);
+        });
 
         $this->dispatcher->listen(StopProfiling::class, function (StopProfiling $event) {
-        	if (array_key_exists($event->name, $this->started)) {
-        		$this->timers[] = [
-        			'event' => $event->name,
-        			'time' => microtime(true) - $this->started[$event->name],
-				];
-			}
-		});
+            if (array_key_exists($event->name, $this->started)) {
+                $this->timers[] = [
+                    'event' => $event->name,
+                    'time' => microtime(true) - $this->started[$event->name],
+                ];
+            }
+        });
     }
 }
