@@ -20,7 +20,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->publishes([$configPath => config_path('api-debugger.php')]);
         $this->mergeConfigFrom($configPath, 'api-debugger');
 
-        // Listen to database queries and inject them to debug output.
+        // Register collections only for debug environment.
         $config = $this->app['config'];
         if ($config['app.debug']) {
             $this->registerCollections($config['api-debugger.collections']);
@@ -34,7 +34,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(Storage::class);
         $this->app->singleton(Debugger::class);
     }
 
@@ -46,7 +45,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     public function provides()
     {
         return [
-            Storage::class,
             Debugger::class,
         ];
     }

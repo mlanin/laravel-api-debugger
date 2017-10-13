@@ -86,10 +86,10 @@ class Debugger
      * Profile action.
      *
      * @param  string $name
-     * @param  \Closure|null $action
+     * @param  \Closure $action
      * @return mixed
      */
-    public function profileMe($name, \Closure $action = null)
+    public function profileMe($name, \Closure $action)
     {
         $this->startProfiling($name);
         $return = $action();
