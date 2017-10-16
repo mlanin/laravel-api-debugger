@@ -78,6 +78,8 @@ For Laravel 5.4
 'Debugger' => Lanin\Laravel\ApiDebugger\Facade::class,
 ```
 
+For Laravel 5.5 package supports [package discovery](https://laravel.com/docs/5.5/packages#package-discovery) feature.
+
 ## Json response
 
 Before extension will populate your answer it will try to distinguish if it is a json response. It will do it by validating if it is a JsonResponse instance. The best way to do it is to return `response()->json();` in your controller's method.

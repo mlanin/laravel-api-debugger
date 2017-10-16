@@ -38,7 +38,10 @@
         "laravel": {
             "providers": [
                 "Lanin\\Laravel\\ApiDebugger\\ServiceProvider"
-            ]
+            ],
+            "aliases": {
+                "Debugger": "Lanin\\Laravel\\ApiDebugger\\Facade"
+            }
         }
     }
 }
