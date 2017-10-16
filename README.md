@@ -50,14 +50,8 @@ When you are developing JSON API sometimes you need to debug it, but if you will
 
 To get the latest version of Laravel Laravel-API-Debugger, simply add the following line to the require block of your `composer.json` file.
 
-For Laravel 5.2
 ```
-"lanin/laravel-api-debugger": "^0.2.0"
-```
-
-For Laravel 5.1
-```
-"lanin/laravel-api-debugger": "^0.1.0"
+"lanin/laravel-api-debugger": "^2.0"
 ```
 
 You'll then need to run `composer install` or `composer update` to download it and have the autoloader updated.
