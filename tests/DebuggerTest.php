@@ -26,6 +26,24 @@ class DebuggerTest extends TestCase
     }
 
     /** @test */
+    public function it_can_dump_multiple_vars()
+    {
+        $this->app['router']->get('foo', function () {
+            lad('baz1', 'baz2');
+
+            return response()->json(['foo' => 'bar']);
+        });
+
+        $this->json('get', '/foo')
+            ->assertStatus(200)
+            ->assertJsonFragment([
+                'dump' => [
+                    ['baz1', 'baz2'],
+                ]
+            ]);
+    }
+
+    /** @test */
     public function it_can_dump_query()
     {
         $this->app['router']->get('foo', function () {

@@ -31,7 +31,9 @@ class Storage
      */
     public function dump($vars)
     {
-        $this->dump = array_merge($this->dump, $vars);
+        $this->dump[] = count($vars) == 1
+            ? $vars[0]
+            : $vars;
     }
 
     /**
