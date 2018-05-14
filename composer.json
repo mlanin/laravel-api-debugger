@@ -40,7 +40,7 @@
                 "Lanin\\Laravel\\ApiDebugger\\ServiceProvider"
             ],
             "aliases": {
-                "Debugger": "Lanin\\Laravel\\ApiDebugger\\Facade"
+                "Debugger": "Lanin\\Laravel\\ApiDebugger\\Support\\Facade"
             }
         }
     }
