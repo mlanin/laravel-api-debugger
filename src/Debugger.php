@@ -107,10 +107,15 @@ class Debugger
     protected function updateResponse(Request $request, Response $response)
     {
         if ($this->needToUpdateResponse($response)) {
-            $data = $response->getData(true) ?: [];
+            $data = $this->getResponseData($response);
+
+            if ($data === false) {
+                return;
+            }
+
             $data[$this->responseKey] = $this->storage->getData();
 
-            $response->setData($data);
+            $this->setResponseData($response, $data);
         }
     }
 
@@ -122,7 +127,47 @@ class Debugger
      */
     protected function needToUpdateResponse(Response $response)
     {
-        return $response instanceof JsonResponse && ! $this->storage->isEmpty();
+        $isJsonResponse = $response instanceof JsonResponse || $response->headers->contains('content-type',
+                'application/json');
+
+        return $isJsonResponse && !$this->storage->isEmpty();
+    }
+
+    /**
+     * Fetches the contents of the response and parses them to an assoc array
+     *
+     * @param Response $response
+     * @return array|bool
+     */
+    protected function getResponseData(Response $response)
+    {
+        if ($response instanceof JsonResponse) {
+            /** @var $response JsonResponse */
+            return $response->getData(true) ?: [];
+        }
+
+        $content = $response->getContent();
+
+        return json_decode($content, true) ?: false;
+    }
+
+    /**
+     * Updates the response content
+     *
+     * @param Response $response
+     * @param array    $data
+     * @return JsonResponse|Response
+     */
+    protected function setResponseData(Response $response, array $data)
+    {
+        if ($response instanceof JsonResponse) {
+            /** @var $response JsonResponse */
+            return $response->setData($data);
+        }
+
+        $content = json_encode($data, JsonResponse::DEFAULT_ENCODING_OPTIONS);
+
+        return $response->setContent($content);
     }
 
     /**
