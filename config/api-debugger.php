@@ -13,5 +13,8 @@ return [
 
         // Profile custom events.
         \Lanin\Laravel\ApiDebugger\Collections\ProfilingCollection::class,
+
+        // Memory usage.
+        \Lanin\Laravel\ApiDebugger\Collections\MemoryCollection::class,
     ],
 ];

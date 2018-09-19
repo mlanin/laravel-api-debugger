@@ -8,6 +8,25 @@ use Illuminate\Support\Facades\Cache;
 class DebuggerTest extends TestCase
 {
     /** @test */
+    public function it_can_dump_memory_usage()
+    {
+        $this->app['router']->get('foo', function () {
+            return response()->json(['foo' => 'bar']);
+        });
+
+        $this->json('get', '/foo')
+            ->assertStatus(200)
+            ->assertJsonStructure([
+                'debug' => [
+                    'memory' => [
+                        'usage',
+                        'peak',
+                    ],
+                ],
+            ]);
+    }
+
+    /** @test */
     public function it_can_dump_var_via_helper()
     {
         $this->app['router']->get('foo', function () {
@@ -21,7 +40,7 @@ class DebuggerTest extends TestCase
             ->assertJsonFragment([
                 'dump' => [
                     'baz',
-                ]
+                ],
             ]);
     }
 
@@ -39,7 +58,7 @@ class DebuggerTest extends TestCase
             ->assertJsonFragment([
                 'dump' => [
                     ['baz1', 'baz2'],
-                ]
+                ],
             ]);
     }
 
@@ -164,8 +183,8 @@ class DebuggerTest extends TestCase
                             'keys',
                             'total',
                         ],
-                    ]
-                ]
+                    ],
+                ],
             ])
             ->assertJsonFragment([
                 'miss' => [
@@ -174,10 +193,10 @@ class DebuggerTest extends TestCase
                             'tags' => ['foo'],
                             'key' => 'bar',
                         ],
-                        'bar'
+                        'bar',
                     ],
-                    'total' => 2
-                ]
+                    'total' => 2,
+                ],
             ]);
     }
 }

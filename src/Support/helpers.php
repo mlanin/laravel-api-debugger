@@ -20,12 +20,11 @@ if (! function_exists('lad_pr_start')) {
      * Start profiling event.
      *
      * @param  string $name
-     * @param Closure|null $action
      * @return void
      */
-    function lad_pr_start($name, \Closure $action = null)
+    function lad_pr_start($name)
     {
-        app(Debugger::class)->startProfiling($name, $action);
+        app(Debugger::class)->startProfiling($name);
     }
 }
 

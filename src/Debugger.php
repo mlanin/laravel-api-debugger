@@ -6,6 +6,7 @@ use Illuminate\Events\Dispatcher as Event;
 use Illuminate\Foundation\Http\Events\RequestHandled;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Lanin\Laravel\ApiDebugger\Collections\ProfilingCollection;
 use Lanin\Laravel\ApiDebugger\Events\StopProfiling;
 use Lanin\Laravel\ApiDebugger\Events\StartProfiling;
 use Symfony\Component\HttpFoundation\Response;
@@ -65,7 +66,6 @@ class Debugger
      * Start profiling event.
      *
      * @param  string $name
-     * @return mixed
      */
     public function startProfiling($name)
     {
@@ -106,6 +106,8 @@ class Debugger
      */
     protected function updateResponse(Request $request, Response $response)
     {
+        $this->stopProfiling(ProfilingCollection::REQUEST_TIMER);
+
         if ($this->needToUpdateResponse($response)) {
             $data = $response->getData(true) ?: [];
             $data[$this->responseKey] = $this->storage->getData();
