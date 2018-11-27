@@ -20,9 +20,9 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->publishes([$configPath => config_path('api-debugger.php')]);
         $this->mergeConfigFrom($configPath, 'api-debugger');
 
-        // Register collections only for debug environment.
+        // Register collections only if debugger is enabled.
         $config = $this->app['config'];
-        if ($config['app.debug']) {
+        if ($config['api-debugger.enabled']) {
             $this->registerCollections($config['api-debugger.collections']);
         }
     }

@@ -1,6 +1,12 @@
 <?php
 
 return [
+
+    /**
+     * Specify whether the API debugger is enabled
+     */
+    'enabled' => env('API_DEBUG') ?? env('APP_DEBUG', false),
+
     /**
      * Specify what data to collect.
      */
