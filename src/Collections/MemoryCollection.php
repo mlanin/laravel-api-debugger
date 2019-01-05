@@ -24,8 +24,8 @@ class MemoryCollection implements Collection
     public function items()
     {
         return [
-            'usage' => memory_get_usage(),
-            'peak' => memory_get_peak_usage(),
+            'usage' => convert_to_unit(memory_get_usage()),
+            'peak' => convert_to_unit(memory_get_peak_usage()),
         ];
     }
 }
