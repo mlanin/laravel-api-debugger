@@ -24,8 +24,20 @@ class MemoryCollection implements Collection
     public function items()
     {
         return [
-            'usage' => convert_to_unit(memory_get_usage()),
-            'peak' => convert_to_unit(memory_get_peak_usage()),
+            'usage' => $this->convertToUnit(memory_get_usage()),
+            'peak' => $this->convertToUnit(memory_get_peak_usage()),
         ];
+    }
+
+    /**
+     * Convert to unit ('b', 'kb', 'mb', 'gb', 'tb', 'pb')
+     * 
+     * @param string $size
+     * @return mixed
+     */
+    public function convertToUnit($size)
+    {
+        $unit = ['b', 'kb', 'mb', 'gb', 'tb', 'pb'];
+        return @round($size/pow(1024, ($i = floor(log($size, 1024)))), 2).' '.$unit[$i];
     }
 }

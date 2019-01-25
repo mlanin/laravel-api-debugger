@@ -54,18 +54,3 @@ if (! function_exists('lad_pr_me')) {
         return app(Debugger::class)->profileMe($name, $action);
     }
 }
-
-
-if (! function_exists('convert_to_unit')) {
-    /**
-     * Convert to unit ('b', 'kb', 'mb', 'gb', 'tb', 'pb')
-     * 
-     * @param string $size
-     * @return mixed
-     */
-    function convert_to_unit($size)
-    {
-        $unit = ['b', 'kb', 'mb', 'gb', 'tb', 'pb'];
-        return @round($size/pow(1024, ($i = floor(log($size, 1024)))), 2).' '.$unit[$i];
-    }
-}
