@@ -22,7 +22,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
         // Register collections only for debug environment.
         $config = $this->app['config'];
-        if ($config['app.debug']) {
+        if ($config['api-debugger.enabled']) {
             $this->registerCollections($config['api-debugger.collections']);
         }
     }
