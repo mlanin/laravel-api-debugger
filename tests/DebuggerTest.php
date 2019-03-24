@@ -199,4 +199,23 @@ class DebuggerTest extends TestCase
                 ],
             ]);
     }
+
+    public function is_does_not_add_debug_if_response_is_integer()
+    {
+	    $this->app['router']->get('foo', function () {
+		    lad('test if integer');
+
+		    return response()->json(1234);
+	    });
+
+	    $this->json('get', '/foo')
+	         ->assertStatus(200)
+	         ->assertJsonMissingExact([
+	         	'debug' => [
+	         		'dump' => [
+	         			'test if integer',
+		            ]
+	            ]
+	         ]);
+    }
 }
