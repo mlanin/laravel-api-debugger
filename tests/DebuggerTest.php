@@ -200,6 +200,7 @@ class DebuggerTest extends TestCase
             ]);
     }
 
+    /** @test */
     public function is_does_not_add_debug_if_response_is_integer()
     {
 	    $this->app['router']->get('foo', function () {
