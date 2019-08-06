@@ -115,7 +115,7 @@ class Debugger
                 return;
             }
 
-            $data[$this->responseKey] = $this->storage->getData();
+            $data->{$this->responseKey} = $this->storage->getData();
 
             $this->setResponseData($response, $data);
         }
@@ -129,8 +129,8 @@ class Debugger
      */
     protected function needToUpdateResponse(Response $response)
     {
-        $isJsonResponse = $response instanceof JsonResponse || $response->headers->contains('content-type',
-                'application/json');
+        $isJsonResponse = $response instanceof JsonResponse ||
+            $response->headers->contains('content-type', 'application/json');
 
         return $isJsonResponse && !$this->storage->isEmpty();
     }
@@ -139,28 +139,28 @@ class Debugger
      * Fetches the contents of the response and parses them to an assoc array
      *
      * @param Response $response
-     * @return array|bool
+     * @return object|bool
      */
     protected function getResponseData(Response $response)
     {
         if ($response instanceof JsonResponse) {
             /** @var $response JsonResponse */
-            return $response->getData(true) ?: [];
+            return $response->getData() ?: new \StdClass();
         }
 
         $content = $response->getContent();
 
-        return json_decode($content, true) ?: false;
+        return json_decode($content) ?: false;
     }
 
     /**
      * Updates the response content
      *
      * @param Response $response
-     * @param array    $data
+     * @param object    $data
      * @return JsonResponse|Response
      */
-    protected function setResponseData(Response $response, array $data)
+    protected function setResponseData(Response $response, $data)
     {
         if ($response instanceof JsonResponse) {
             /** @var $response JsonResponse */
