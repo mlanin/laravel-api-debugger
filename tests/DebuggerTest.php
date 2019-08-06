@@ -199,4 +199,19 @@ class DebuggerTest extends TestCase
                 ],
             ]);
     }
+
+    /** @test */
+    public function it_preserves_structure()
+    {
+        $this->app['router']->get('foo', function () {
+            return response()->json([
+                'foo' => 'bar',
+                'baz' => (object)[],
+            ]);
+        });
+
+        $this->json('get', '/foo')
+            ->assertStatus(200)
+            ->assertSeeText('"baz":{}');
+    }
 }
