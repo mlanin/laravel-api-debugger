@@ -201,6 +201,36 @@ class DebuggerTest extends TestCase
     }
 
     /** @test */
+    public function it_preserves_object()
+    {
+        $this->app['router']->get('foo', function () {
+            return response()->json([
+                'foo' => 'bar',
+                'baz' => (object)[],
+            ]);
+        });
+
+        $this->json('get', '/foo')
+            ->assertStatus(200)
+            ->assertSeeText('"baz":{}');
+    }
+
+    /** @test */
+    public function it_preserves_array()
+    {
+        $this->app['router']->get('foo', function () {
+            return response()->json([
+                'foo' => 'bar',
+                'baz' => [],
+            ]);
+        });
+
+        $this->json('get', '/foo')
+            ->assertStatus(200)
+            ->assertSeeText('"baz":[]');
+    }
+
+    /** @test */
     public function is_does_not_add_debug_if_response_is_integer()
     {
 	    $this->app['router']->get('foo', function () {
