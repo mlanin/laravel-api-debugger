@@ -16,7 +16,12 @@ class Debugger
     /**
      * @var string
      */
-    protected $responseKey;
+    const DEFAULT_RESPONSE_KEY = 'debug';
+
+    /**
+     * @var string
+     */
+    protected $responseKey = self::DEFAULT_RESPONSE_KEY;
 
     /**
      * @var Storage
@@ -38,8 +43,6 @@ class Debugger
     {
         $this->storage = $storage;
         $this->event = $event;
-
-        $this->responseKey = config('api-debugger.response_key', 'debug');
 
         $this->event->listen(RequestHandled::class, function (RequestHandled $event) {
             $this->updateResponse($event->request, $event->response);

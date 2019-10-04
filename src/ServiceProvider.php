@@ -24,6 +24,8 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $config = $this->app['config'];
         if ($config['api-debugger.enabled']) {
             $this->registerCollections($config['api-debugger.collections']);
+
+            $this->setResponseKey($config['api-debugger.response_key']);
         }
     }
 
@@ -60,6 +62,21 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
         foreach ($collections as $collection) {
             $debugger->populateWith($this->app->make($collection));
+        }
+    }
+
+    /**
+     * Set the response key for the debug object
+     * (default: debug)
+     *
+     * @param string key
+     */
+    protected function setResponseKey($key)
+    {
+        $debugger = $this->app->make(Debugger::class);
+
+        if($key !== Debugger::DEFAULT_RESPONSE_KEY){
+            $debugger->setResponseKey($key);
         }
     }
 }
