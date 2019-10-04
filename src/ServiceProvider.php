@@ -75,7 +75,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     {
         $debugger = $this->app->make(Debugger::class);
 
-        if($key !== Debugger::DEFAULT_RESPONSE_KEY){
+        if($key && $key !== Debugger::DEFAULT_RESPONSE_KEY){
             $debugger->setResponseKey($key);
         }
     }
