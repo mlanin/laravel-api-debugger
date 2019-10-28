@@ -50,6 +50,7 @@ class QueriesCollection implements Collection
         return [
             'total' => count($this->queries),
             'items' => $this->queries,
+            'time' => collect($this->queries)->sum('time')
         ];
     }
 

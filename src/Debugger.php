@@ -14,6 +14,11 @@ use Symfony\Component\HttpFoundation\Response;
 class Debugger
 {
     /**
+     * @var bool
+     */
+    protected $disabled = false;
+
+    /**
      * @var string
      */
     protected $responseKey = 'debug';
@@ -69,6 +74,9 @@ class Debugger
      */
     public function startProfiling($name)
     {
+        if ($this->isDisabled()) {
+            return;
+        }
         $this->event->dispatch(new StartProfiling($name));
     }
 
@@ -79,6 +87,9 @@ class Debugger
      */
     public function stopProfiling($name)
     {
+        if ($this->isDisabled()) {
+            return;
+        }
         $this->event->dispatch(new StopProfiling($name));
     }
 
@@ -99,6 +110,26 @@ class Debugger
     }
 
     /**
+     * Turn the debugger on/off
+     *
+     * @param  bool  $val
+     */
+    public function disable($val = true)
+    {
+        $this->disabled = $val;
+    }
+
+    /**
+     * Is the debugger disabled?
+     *
+     * @return bool
+     */
+    protected function isDisabled()
+    {
+        return $this->disabled;
+    }
+
+    /**
      * Update final response.
      *
      * @param Request $request
@@ -111,7 +142,7 @@ class Debugger
         if ($this->needToUpdateResponse($response)) {
             $data = $this->getResponseData($response);
 
-            if ($data === false) {
+            if (! is_object($data)) {
                 return;
             }
 
@@ -132,7 +163,7 @@ class Debugger
         $isJsonResponse = $response instanceof JsonResponse ||
             $response->headers->contains('content-type', 'application/json');
 
-        return $isJsonResponse && !$this->storage->isEmpty();
+        return ! $this->isDisabled() && $isJsonResponse && ! $this->storage->isEmpty();
     }
 
     /**
