@@ -178,6 +178,16 @@ class Debugger
     }
 
     /**
+     * Get the current response key
+     *
+     * @return string
+     */
+    public function getResponseKey()
+    {
+        return $this->responseKey;
+    }
+
+    /**
      * Set response attribute key name.
      *
      * @param $key
