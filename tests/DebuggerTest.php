@@ -4,6 +4,7 @@ namespace Lanin\Laravel\ApiDebugger\Tests;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Cache;
+use Lanin\Laravel\ApiDebugger\Debugger;
 
 class DebuggerTest extends TestCase
 {
@@ -228,5 +229,20 @@ class DebuggerTest extends TestCase
         $this->json('get', '/foo')
             ->assertStatus(200)
             ->assertSeeText('"baz":[]');
+    }
+
+    /** @test */
+    public function it_can_set_a_new_response_key()
+    {
+        /** @var Debugger $debugger */
+        $debugger = $this->app->make(Debugger::class);
+
+        $this->assertEquals(Debugger::DEFAULT_RESPONSE_KEY, $debugger->getResponseKey(), 'Response key is not the default');
+
+        $new_response_key = 'key123';
+
+        $debugger->setResponseKey($new_response_key);
+
+        $this->assertEquals($new_response_key, $debugger->getResponseKey(), 'Response key was not changed from "'.$debugger->getResponseKey().'" to "'.$new_response_key.'"');
     }
 }

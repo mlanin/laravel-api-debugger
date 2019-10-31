@@ -16,7 +16,12 @@ class Debugger
     /**
      * @var string
      */
-    protected $responseKey = 'debug';
+    const DEFAULT_RESPONSE_KEY = 'debug';
+
+    /**
+     * @var string
+     */
+    protected $responseKey = self::DEFAULT_RESPONSE_KEY;
 
     /**
      * @var Storage
@@ -170,6 +175,16 @@ class Debugger
         $content = json_encode($data, JsonResponse::DEFAULT_ENCODING_OPTIONS);
 
         return $response->setContent($content);
+    }
+
+    /**
+     * Get the current response key
+     *
+     * @return string
+     */
+    public function getResponseKey()
+    {
+        return $this->responseKey;
     }
 
     /**

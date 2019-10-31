@@ -18,4 +18,6 @@ return [
         // Memory usage.
         \Lanin\Laravel\ApiDebugger\Collections\MemoryCollection::class,
     ],
+
+    'response_key' => env('API_DEBUGGER_KEY', 'debug')
 ];
