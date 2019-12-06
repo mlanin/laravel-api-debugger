@@ -118,32 +118,45 @@ class QueriesCollection implements Collection
     {
         try {
             return (string) $attribute;
+        } catch (\Throwable $e) {
+            return $this->handleConvertAttributeException($attribute);
         } catch (\Exception $e) {
-            switch (true) {
-                // Handle DateTime attribute pass.
-                case $attribute instanceof \DateTime:
-                    return $attribute->format('Y-m-d H:i:s');
+            return $this->handleConvertAttributeException($attribute);
+        }
+    }
 
-                // Handle callables.
-                case $attribute instanceof \Closure:
-                    return $this->convertAttribute($attribute());
+    /**
+     * Handle convert attribute exception and convert attribute to string.
+     *
+     * @param  mixed $attribute
+     * @return string
+     */
+    protected function handleConvertAttributeException($attribute)
+    {
+        switch (true) {
+            // Handle DateTime attribute pass.
+            case $attribute instanceof \DateTime:
+                return $attribute->format('Y-m-d H:i:s');
 
-                // Handle arrays using json by default or print_r if error occurred.
-                case is_array($attribute):
-                    $json = json_encode($attribute);
+            // Handle callables.
+            case $attribute instanceof \Closure:
+                return $this->convertAttribute($attribute());
 
-                    return json_last_error() === JSON_ERROR_NONE
-                        ? $json
-                        : print_r($attribute);
+            // Handle arrays using json by default or print_r if error occurred.
+            case is_array($attribute):
+                $json = json_encode($attribute);
 
-                // Handle all other object.
-                case is_object($attribute):
-                    return get_class($attribute);
+                return json_last_error() === JSON_ERROR_NONE
+                    ? $json
+                    : print_r($attribute);
 
-                // For all unknown.
-                default:
-                    return '?';
-            }
+            // Handle all other object.
+            case is_object($attribute):
+                return get_class($attribute);
+
+            // For all unknown.
+            default:
+                return '?';
         }
     }
 }
