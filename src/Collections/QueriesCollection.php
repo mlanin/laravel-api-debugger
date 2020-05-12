@@ -118,7 +118,7 @@ class QueriesCollection implements Collection
     {
         try {
             return (string) $attribute;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             switch (true) {
                 // Handle DateTime attribute pass.
                 case $attribute instanceof \DateTime:

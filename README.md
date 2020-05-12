@@ -58,6 +58,14 @@ When you are developing JSON API sometimes you need to debug it, but if you will
 
 To get the latest version of Laravel Laravel-API-Debugger, simply add the following line to the require block of your `composer.json` file.
 
+For PHP >= 7.1:
+
+```
+"lanin/laravel-api-debugger": "^4.0"
+```
+
+For PHP < 7.1:
+
 ```
 "lanin/laravel-api-debugger": "^3.0"
 ```
