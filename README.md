@@ -88,6 +88,11 @@ For Laravel 5.4
 
 For Laravel 5.5 package supports [package discovery](https://laravel.com/docs/5.5/packages#package-discovery) feature.
 
+Copy the config file to your own project by running the following command:
+```php
+php artisan vendor:publish --provider="Lanin\Laravel\ApiDebugger\ServiceProvider"
+```
+
 ## Json response
 
 Before extension will populate your answer it will try to distinguish if it is a json response. It will do it by validating if it is a JsonResponse instance. The best way to do it is to return `response()->json();` in your controller's method.
@@ -139,6 +144,7 @@ So be careful with this, because everyone will see your output, but at least deb
 
 **Note!** By default Debugger will collect data ONLY when you set `APP_DEBUG=true`.
 So you don't have to worry that someone will see your system data on production.
+You can overwrite that by adding `API_DEBUGGER_ENABLED=true|false` to your .env file, or by changing the value of `enabled` in the config file.
 
 All available collections can be found in `api-debugger.php` config that you can publish and update as you wish.
 
