@@ -34,6 +34,11 @@ class Debugger
     protected $event;
 
     /**
+     * @var bool
+     */
+    protected $disable = false;
+
+    /**
      * Create a new Debugger service.
      *
      * @param Storage $storage
@@ -88,6 +93,16 @@ class Debugger
     }
 
     /**
+     * Disable debugger output on demand for a specific response
+     *
+     * @param bool $disable
+     */
+    public function disableOutput($disable)
+    {
+        $this->disable = $disable;
+    }
+
+    /**
      * Profile action.
      *
      * @param  string $name
@@ -137,7 +152,7 @@ class Debugger
         $isJsonResponse = $response instanceof JsonResponse ||
             $response->headers->contains('content-type', 'application/json');
 
-        return $isJsonResponse && !$this->storage->isEmpty();
+        return ! $this->disable && $isJsonResponse && !$this->storage->isEmpty();
     }
 
     /**

@@ -245,4 +245,23 @@ class DebuggerTest extends TestCase
 
         $this->assertEquals($new_response_key, $debugger->getResponseKey(), 'Response key was not changed from "'.$debugger->getResponseKey().'" to "'.$new_response_key.'"');
     }
+
+    /** @test */
+    public function it_can_be_disabled_for_a_response()
+    {
+        $this->app['router']->get('foo', function () {
+            lad_disable_output(true);
+
+            return response()->json(['foo' => 'bar']);
+        });
+
+        $this->json('get', '/foo')
+            ->assertStatus(200)
+            ->assertJsonMissing([
+                'debug',
+            ])
+            ->assertJsonFragment([
+                'event' => 'test',
+            ]);
+    }
 }

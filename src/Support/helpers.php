@@ -15,6 +15,19 @@ if (! function_exists('lad')) {
     }
 }
 
+if (! function_exists('lad_disable_output')) {
+    /**
+     * Disable output for a single response.
+     *
+     * @param  bool $disavle
+     * @return void
+     */
+    function lad_disable_output($disable)
+    {
+        app(Debugger::class)->disableOutput($disable);
+    }
+}
+
 if (! function_exists('lad_pr_start')) {
     /**
      * Start profiling event.
