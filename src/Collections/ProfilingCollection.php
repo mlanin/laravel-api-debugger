@@ -80,9 +80,9 @@ class ProfilingCollection implements Collection
      * Start timer.
      *
      * @param string $name
-     * @param null $time
+     * @param float|null $time
      */
-    protected function start($name, $time = null)
+    protected function start(string $name, ?float $time = null)
     {
         $this->started[$name] = $time ?: microtime(true);
     }

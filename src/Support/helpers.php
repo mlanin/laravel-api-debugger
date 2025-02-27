@@ -49,7 +49,7 @@ if (! function_exists('lad_pr_me')) {
      * @param  Closure|null $action
      * @return mixed
      */
-    function lad_pr_me($name, \Closure $action = null)
+    function lad_pr_me($name, ?\Closure $action = null)
     {
         return app(Debugger::class)->profileMe($name, $action);
     }
