@@ -150,6 +150,8 @@ class Debugger
     {
         if ($response instanceof JsonResponse) {
             /** @var $response JsonResponse */
+            $response->setEncodingOptions($response::DEFAULT_ENCODING_OPTIONS | JSON_INVALID_UTF8_SUBSTITUTE);
+
             return $response->getData() ?: new \StdClass();
         }
 
